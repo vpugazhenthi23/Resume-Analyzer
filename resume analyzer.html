@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Resume Analyzer (Simple)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  </head>
+  <link rel="stylesheet" href="style.css" />
+
+  <body>
+    <h1>Resume Analyzer</h1>
+    <div class="cs-style">
+      <p>
+        Paste your resume text below and click Analyze. Everything runs in your
+        browser.
+      </p>
+
+      <!-- INPUT -->
+      <textarea
+        id="resumeInput"
+        rows="18"
+        cols="80"
+        placeholder="Paste your resume here..."
+        class="cs-table"
+      ></textarea>
+      <br /><br />
+      <button id="analyzeBtn">Analyze</button>
+      <button id="exampleBtn">Use example</button>
+      <button class="clr-btn">clear</button>
+    </div>
+    <!-- RESULTS (empty until the user clicks Analyze) -->
+    <hr class="hr-Line" />
+    <div class="cs-div">
+      <button class="clr-btn2"><i class="bi bi-x-lg"></i></button>
+      <h2 id="scoreTitle"></h2>
+      <div class="js-table">
+        <table id="scoreTable" border="1" cellpadding="6"></table>
+      </div>
+      <h3 id="notesTitle"></h3>
+      <ul id="notesList"></ul>
+    </div>
+    <dialog
+      id="resumeAlert"
+      class="resume-alert"
+      aria-labelledby="resumeAlertTitle"
+      aria-describedby="resumeAlertMessage"
+    >
+      <span class="alert-icon" aria-hidden="true">!</span>
+      <h2 id="resumeAlertTitle">Add your resume first</h2>
+      <p id="resumeAlertMessage">
+        Paste your resume text, then select Analyze to see your score and tips.
+      </p>
+      <button id="dismissAlert" type="button">Got it</button>
+    </dialog>
+
+  </body>
+  <script src="functional program.js"></script>
+</html>

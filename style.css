@@ -1,0 +1,228 @@
+:root {
+    --background: #17251c;
+    --surface: #263b2c;
+    --surface-hover: #344b39;
+    --text: #f4f1dc;
+    --muted: #d0d5ae;
+    --accent: #f9c300;
+    --accent-hover: #fefe00;
+    --accent-light: #ffd000;
+}
+
+* {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-top: 20px;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text);
+}
+
+h1 {
+    color: var(--accent-light);
+}
+
+.cs-style,
+h1 {
+    text-align: center;
+}
+
+.resume-alert {
+    width: min(90vw, 460px);
+    margin: auto;
+    padding: 28px 30px;
+    border: 1px solid rgba(244, 241, 220, 0.25);
+    border-left: 6px solid var(--accent);
+    border-radius: 14px;
+    background-color: var(--surface);
+    color: var(--text);
+    text-align: center;
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.45);
+}
+
+.resume-alert::backdrop {
+    background-color: rgba(8, 15, 10, 0.76);
+    backdrop-filter: blur(3px);
+}
+
+.alert-icon {
+    display: grid;
+    width: 52px;
+    height: 52px;
+    margin: 0 auto;
+    place-items: center;
+    border-radius: 50%;
+    background-color: var(--accent);
+    color: var(--background);
+    font-size: 28px;
+}
+
+.resume-alert h2 {
+    margin: 16px 0 8px;
+    color: var(--accent-light);
+    font-size: 25px;
+}
+
+.resume-alert p {
+    margin: 0 0 22px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+#dismissAlert {
+    margin: 0;
+    padding: 7px 14px;
+    border-color: var(--accent);
+    background-color: var(--accent);
+    color: var(--background);
+}
+
+p {
+    font-size: larger;
+    color: var(--muted);
+}
+
+.cs-div {
+    position: relative;
+    width: min(90%, 860px);
+    margin: 28px auto;
+    padding: 24px 28px;
+    border: 1px solid rgba(244, 241, 237, 0.18);
+    border-radius: 12px;
+    background-color: var(--surface);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
+}
+
+.cs-div h2,
+.cs-div h3 {
+    color: var(--accent-light);
+}
+
+#resumeInput {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid rgba(244, 241, 237, 0.3);
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text);
+    padding-left: 20px;
+    font-size: larger;
+}
+
+#resumeInput::placeholder {
+    color: var(--muted);
+    opacity: 1;
+}
+
+#resumeInput:focus {
+    outline: 2px solid var(--accent-light);
+    outline-offset: 2px;
+}
+
+/* button {
+    padding: 10px 18px;
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    background-color: var(--accent);
+    color: var(--background);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(238, 215, 7, 0.979), 0 0 14px rgba(255, 70, 70, 0.55);
+} */
+#analyzeBtn{
+    padding: 10px 18px;
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    background-color: var(--accent);
+    color: var(--background);
+    font-size: larger;
+    cursor: pointer;
+    box-shadow: 0 4px 12px  rgba(120, 253, 4, 0.421), 0 0 14px rgba(255, 70, 70, 0.55);
+}
+#analyzeBtn:hover {
+    background-color: var(--accent-hover);
+}
+#exampleBtn, .clr-btn{
+   padding: 10px 18px;
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    background-color: var(--accent);
+    color: var(--background);
+    cursor: pointer;
+    font-size: larger;
+}
+#exampleBtn,
+.clr-btn {
+    border-color: rgba(244, 241, 237, 0.4);
+    background-color: var(--surface);
+    color: var(--text);
+}
+
+#exampleBtn:hover,
+.clr-btn:hover {
+    background-color:black;
+    box-shadow: 0 4px 12px  rgba(0, 0, 0, 0.421);
+}
+
+
+#scoreTable {
+    width: 60%;
+    border-style: solid;
+    color: var(--text);
+}
+#scoreTable th,
+#scoreTable td {
+    padding: 10px 12px;
+    border: 1px solid rgba(244, 241, 237, 0.2);
+    text-align: left;
+}
+
+#scoreTable th:hover {
+    color: yellow;
+
+}
+.clr-btn2 {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: none;
+    width: 36px;
+    height: 36px;
+    margin: 0;
+    padding: 0;
+    place-items: center;
+    border: 1px solid rgba(244, 241, 220, 0.3);
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    box-shadow: 0 4px 12px rgba(238, 215, 7, 0.979), 0 0 14px rgba(255, 70, 70, 0.55);
+    font-size: large;
+}
+
+.clr-btn2.is-visible {
+    display: grid;
+}
+
+.clr-btn2:hover {
+    color: rgb(0, 0, 0);
+    background-color: red;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55), 0 0 20px rgba(255, 70, 70, 0.75);
+
+}
+.clr-btn2 > i {
+    margin: 0;
+    line-height: 1;
+}
+.cs-div ul {
+    padding-left: 24px;
+    line-height: 1.7;
+}
+
+.cs-line {
+    display: none;
+}
+
+#exampleBtn .cs-line {
+    display: initial;
+}
