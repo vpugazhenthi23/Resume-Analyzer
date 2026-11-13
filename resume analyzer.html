@@ -11,26 +11,56 @@
     <h1>Resume Analyzer</h1>
     <div class="cs-style">
       <p>
-        Paste your resume text below and click Analyze. Everything runs in your
-        browser.
+        Paste your resume or upload a file, then click Analyze. Your resume is
+        processed in your browser.
       </p>
 
-      <!-- INPUT -->
-      <textarea
-        id="resumeInput"
-        rows="18"
-        cols="80"
-        placeholder="Paste your resume here..."
-        class="cs-table"
-      ></textarea>
-      <br /><br />
+      <div class="import-tabs" role="tablist" aria-label="Resume import method">
+        <button id="pasteTab" class="import-tab is-active" type="button" role="tab"
+          aria-selected="true" aria-controls="pastePanel">Paste resume</button>
+        <button id="uploadTab" class="import-tab" type="button" role="tab"
+          aria-selected="false" aria-controls="uploadPanel">Upload a file</button>
+      </div>
+
+      <section id="pastePanel" class="import-panel" role="tabpanel" aria-labelledby="pasteTab">
+        <textarea
+          id="resumeInput"
+          rows="18"
+          cols="80"
+          placeholder="Paste your resume here..."
+          class="cs-table"
+        ></textarea>
+      </section>
+
+      <section id="uploadPanel" class="import-panel" role="tabpanel"
+        aria-labelledby="uploadTab" hidden>
+        <label class="upload-dropzone" for="resumeFile">
+          <span class="upload-icon" aria-hidden="true"><i class="bi bi-cloud-arrow-up"></i></span>
+          <span class="upload-title">Choose a resume file</span>
+          <span class="upload-hint">PDF, Word (.docx), or plain text (.txt)</span>
+          <input id="resumeFile" type="file" accept=".pdf,.docx,.txt,application/pdf,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+        </label>
+        <div id="selectedFileInfo" class="selected-file" role="status" aria-live="polite" hidden>
+          <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+          <span id="selectedFileName"></span>
+        </div>
+        <p id="uploadStatus" class="upload-status" aria-live="polite">
+          Your file is read locally and is not uploaded to a server.
+        </p>
+        <p class="sample-download">
+          Need a sample? <a href="example-resume.txt" download>Download an example resume (.txt)</a>
+        </p>
+      </section>
+
+      <div class="input-actions">
       <button id="analyzeBtn">Analyze</button>
       <button id="exampleBtn">Use example</button>
-      <button class="clr-btn">clear</button>
+      <button class="clr-btn" type="button">Clear</button>
+      </div>
     </div>
     <!-- RESULTS (empty until the user clicks Analyze) -->
     <hr class="hr-Line" />
-    <div class="cs-div">
+    <div class="cs-div cs-style-div">
       <button class="clr-btn2"><i class="bi bi-x-lg"></i></button>
       <h2 id="scoreTitle"></h2>
       <div class="js-table">
@@ -48,11 +78,13 @@
       <span class="alert-icon" aria-hidden="true">!</span>
       <h2 id="resumeAlertTitle">Add your resume first</h2>
       <p id="resumeAlertMessage">
-        Paste your resume text, then select Analyze to see your score and tips.
+        Paste your resume or upload a supported file, then select Analyze to see your score and tips.
       </p>
       <button id="dismissAlert" type="button">Got it</button>
     </dialog>
 
-  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
   <script src="functional program.js"></script>
+  </body>
 </html>

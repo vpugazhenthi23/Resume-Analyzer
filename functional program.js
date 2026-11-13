@@ -188,9 +188,113 @@ function showResult() {
 }
 
 // ============================================================
+// Resume import: paste text or extract it from a local file
+// ============================================================
+var importRequest = 0;
+var currentImportMode = "paste";
+var selectedResumeFile = null;
+
+function setImportMode(mode) {
+    var pasteMode = mode === "paste";
+    currentImportMode = mode;
+    document.getElementById("pasteTab").classList.toggle("is-active", pasteMode);
+    document.getElementById("pasteTab").setAttribute("aria-selected", String(pasteMode));
+    document.getElementById("uploadTab").classList.toggle("is-active", !pasteMode);
+    document.getElementById("uploadTab").setAttribute("aria-selected", String(!pasteMode));
+    document.getElementById("pastePanel").hidden = !pasteMode;
+    document.getElementById("uploadPanel").hidden = pasteMode;
+}
+
+function setUploadStatus(message, state) {
+    var status = document.getElementById("uploadStatus");
+    status.textContent = message;
+    status.classList.remove("is-error", "is-success");
+    if (state) status.classList.add("is-" + state);
+}
+
+async function extractResumeText(file) {
+    var extension = file.name.split(".").pop().toLowerCase();
+    var buffer = await file.arrayBuffer();
+
+    if (extension === "txt") {
+        return new TextDecoder().decode(buffer);
+    }
+
+    if (extension === "pdf") {
+        if (!window.pdfjsLib) {
+            throw new Error("The PDF reader could not be loaded. Check your internet connection and try again.");
+        }
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+        var pdf = await window.pdfjsLib.getDocument({ data: buffer }).promise;
+        var pages = [];
+        for (var pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+            var page = await pdf.getPage(pageNumber);
+            var content = await page.getTextContent();
+            pages.push(content.items.map(function (item) {
+                return item.str;
+            }).join(" "));
+        }
+        return pages.join("\n");
+    }
+
+    if (extension === "docx") {
+        if (!window.mammoth) {
+            throw new Error("The Word reader could not be loaded. Check your internet connection and try again.");
+        }
+        var result = await window.mammoth.extractRawText({ arrayBuffer: buffer });
+        return result.value;
+    }
+
+    throw new Error("Choose a PDF, Word (.docx), or plain text (.txt) file.");
+}
+
+async function loadResumeFile(file) {
+    var request = ++importRequest;
+    selectedResumeFile = file || null;
+    document.getElementById("resumeInput").value = "";
+    var fileInfo = document.getElementById("selectedFileInfo");
+
+    if (!file) {
+        fileInfo.hidden = true;
+        setUploadStatus("Your file is read locally and is not uploaded to a server.");
+        return;
+    }
+
+    document.getElementById("selectedFileName").textContent = file.name;
+    fileInfo.hidden = false;
+    setUploadStatus("Reading " + file.name + "…");
+    try {
+        var text = await extractResumeText(file);
+        if (request !== importRequest) return;
+        if (!text.trim()) {
+            throw new Error("No readable text was found. If this is a scanned PDF, use a text-based PDF or paste the resume.");
+        }
+        document.getElementById("resumeInput").value = text;
+        setUploadStatus(file.name + " is ready to analyze.", "success");
+    } catch (error) {
+        if (request !== importRequest) return;
+        selectedResumeFile = null;
+        fileInfo.hidden = true;
+        setUploadStatus(error.message || "Could not read this file. Try another file or paste the resume.", "error");
+    }
+}
+
+// ============================================================
 // STEP 5: Connect the buttons to the functions
 // ============================================================
 document.querySelector('.hr-Line').classList.add('cs-line');
+
+document.getElementById("pasteTab").addEventListener("click", function () {
+    setImportMode("paste");
+});
+document.getElementById("uploadTab").addEventListener("click", function () {
+    setImportMode("upload");
+});
+document.getElementById("resumeFile").addEventListener("change", function (event) {
+    loadResumeFile(event.target.files[0]);
+    event.target.value = "";
+});
 
 document.getElementById("dismissAlert").addEventListener("click", function () {
     document.getElementById("resumeAlert").close();
@@ -198,18 +302,26 @@ document.getElementById("dismissAlert").addEventListener("click", function () {
 });
 
 document.getElementById("analyzeBtn").addEventListener("click", ()=>{
+    if (currentImportMode === "upload" && !selectedResumeFile) {
+        document.getElementById("resumeAlert").showModal();
+        document.getElementById("dismissAlert").focus();
+        return;
+    }
     showResult();
     if (document.getElementById("resumeInput").value.trim() !== "") {
         document.querySelector('.hr-Line').classList.remove('cs-line');
         document.querySelector('.clr-btn2').classList.add('is-visible');
-        document.querySelector('.cs-div').scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
+        const division = document.querySelector('.cs-div');
+        division.classList.remove('cs-style-div');
+        division.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        })
     }
 });
 
 document.getElementById("exampleBtn").addEventListener("click", function () {
+    setImportMode("paste");
     document.getElementById("resumeInput").value =
         "Jordan Ellis\n" +
         "jordan.ellis@email.com | (555) 214-8890 | linkedin.com/in/jordanellis\n\n" +
@@ -226,7 +338,12 @@ document.getElementById("exampleBtn").addEventListener("click", function () {
         "Microsoft Office, Social Media";
 });
 document.querySelector('.clr-btn').addEventListener("click" ,()=> { 
+    importRequest++;
+    selectedResumeFile = null;
+    document.getElementById("resumeFile").value = "";
+    document.getElementById("selectedFileInfo").hidden = true;
     document.getElementById("resumeInput").value = '';
+    setUploadStatus("Your file is read locally and is not uploaded to a server.");
 })
 document.querySelector('.clr-btn2').addEventListener("click", ()=>{
     document.getElementById("scoreTitle").innerHTML ='';
@@ -234,4 +351,8 @@ document.querySelector('.clr-btn2').addEventListener("click", ()=>{
     document.getElementById("notesTitle").innerHTML ='';
     document.getElementById("notesList").innerHTML ='';
     document.querySelector('.clr-btn2').classList.remove('is-visible');
+
+    const divison2 = document.querySelector('.cs-div');
+    divison2.classList.add('cs-style-div');
+
 })
